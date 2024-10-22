@@ -45,3 +45,21 @@ Nama & NPM
 - Pembayaran memiliki metode processPayment(), refundPayment(), dan updatePaymentStatus() untuk memproses pembayaran.
 - Pengiriman memiliki metode scheduleDelivery(), updateDeliveryStatus(), dan trackDelivery() untuk mengelola pengiriman.
 
+## ERD Diagram
+![ERD Diagram e-commerce](https://github.com/DzakiYushiibanaa/E-COMMERCE_KEL-4_PBW_A/blob/a06ca779caa6b6495bc049a7502f0f21c55382ff/Image/ERD%20Diagram.png)
+### Kardinalitas
+- User_Pengguna ke Keranjang : Kardinalitas 1 to 1. Setiap pengguna hanya memiliki satu keranjang, dan satu keranjang hanya dimiliki oleh satu pengguna.
+
+- Keranjang ke Item_Keranjang : Kardinalitas 1 to many. Setiap keranjang bisa memiliki banyak item, namun banyaknya item hanya terkait dengan satu keranjang.
+
+- Item_Keranjang ke Produk : Kardinalitas many to 1. Satu produk bisa muncul di banyak item keranjang yang berbeda, namun satu item keranjang hanya terkait dengan satu produk.
+
+- Keranjang ke Pesanan : Kardinalitas 1 to 1. Setiap keranjang user hanya bisa dikaitkan dengan satu pesanan, dan setiap pesanan hanya berasal dari satu keranjang.
+
+- Pesanan ke Detail_Pesanan: Kardinalitas 1 to many. Satu pesanan bisa memiliki banyak detail pesanan, tetapi setiap detail pesanan hanya terkait dengan satu pesanan.
+
+- Detail_Pesanan ke Produk: Kardinalitas many to 1. Satu produk bisa muncul di banyak detail pesanan yang berbeda, tetapi setiap detail pesanan hanya terkait dengan satu produk.
+
+- Pesanan ke Pembayaran: Kardinalitas many to 1. Banayaknya pesanan hanya terkait dengan satu pembayaran, dan setiap pembayaran bisa untuk banyak pesanan.
+
+- Pembayaran ke Pengiriman : Kardinalitas 1 to 1. Satu Pembayaran hanya bisa melakukan satu kali pengiriman untuk berbagai pesanan, dan setiap pengiriman hanya terkait dengan satu pembayaran.
