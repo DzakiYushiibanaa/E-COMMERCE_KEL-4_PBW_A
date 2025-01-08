@@ -34,32 +34,79 @@ Nama & NPM
 - Logout - Admin dapat keluar dari sistem
 
 ## CLASS DIAGRAM
-![class diagram e-commerce](https://github.com/user-attachments/assets/923e2a66-268f-4632-95ec-0b8e5f4cd9db)
+![class diagram e-commerce](https://github.com/DzakiYushiibanaa/E-COMMERCE_KEL-4_PBW_A/blob/374b9137ec002099ec325520071adf0455d8930f/Image/Class%20Diagram.png)
 #### Metode di Setiap Kelas:
-- User_Pengguna memiliki metode register(), login(), dan updateProfile() untuk mengelola pengguna.
-- Keranjang memiliki metode addItem(), removeItem(), clearCart(), dan getTotalPrice() untuk mengelola item di keranjang.
-- Item_Keranjang memiliki metode updateQuantity() untuk memperbarui jumlah item di keranjang.
-- Produk memiliki metode updateStock() dan updatePrice() untuk mengelola stok dan harga produk.
-- Pesanan memiliki metode createOrder(), cancelOrder(), dan getOrderDetails() untuk pengelolaan pesanan.
-- Detail_Pesanan memiliki metode updateDetails() untuk memperbarui detail pesanan.
-- Pembayaran memiliki metode processPayment(), refundPayment(), dan updatePaymentStatus() untuk memproses pembayaran.
-- Pengiriman memiliki metode scheduleDelivery(), updateDeliveryStatus(), dan trackDelivery() untuk mengelola pengiriman.
+Metode di Setiap Kelas:
+
+- Users:
+register(): Metode untuk mendaftarkan pengguna baru.
+login(): Metode untuk otentikasi pengguna agar dapat mengakses sistem.
+updateProfile(): Metode untuk memperbarui data profil pengguna, seperti nama, email, dan password.
+
+- Carts:
+addItem(): Menambahkan item (produk) ke keranjang belanja.
+removeItem(): Menghapus item tertentu dari keranjang belanja.
+clearCart(): Menghapus semua item dalam keranjang belanja.
+getTotalPrice(): Menghitung total harga semua item dalam keranjang.
+
+- Cart_Items:
+updateQuantity(): Memperbarui jumlah suatu produk yang ada dalam keranjang.
+
+- Products:
+updateStock(): Memperbarui jumlah stok produk setelah terjadi transaksi.
+updatePrice(): Mengubah harga suatu produk.
+
+- Orders:
+createOrder(): Membuat pesanan baru berdasarkan data dari keranjang belanja.
+cancelOrder(): Membatalkan pesanan sebelum diproses lebih lanjut.
+getOrderDetails(): Mengambil rincian informasi pesanan, seperti produk, jumlah, dan harga.
+
+- Order_Items:
+updateDetails(): Memperbarui detail produk yang terkait dengan suatu pesanan (misalnya jumlah atau harga produk).
+
+- Payments:
+processPayment(): Memproses pembayaran pesanan melalui metode yang dipilih.
+refundPayment(): Melakukan pengembalian uang jika terjadi pembatalan pesanan.
+updatePaymentStatus(): Memperbarui status pembayaran (pending, completed, failed, refunded).
+
+- Promos (Opsional):
+applyPromo(): Metode untuk menerapkan promo ke pesanan tertentu.
+removePromo(): Menghapus promo yang telah diterapkan.
 
 ## ERD Diagram
-![ERD Diagram e-commerce](https://github.com/DzakiYushiibanaa/E-COMMERCE_KEL-4_PBW_A/blob/a06ca779caa6b6495bc049a7502f0f21c55382ff/Image/ERD%20Diagram.png)
+![ERD Diagram e-commerce](https://github.com/DzakiYushiibanaa/E-COMMERCE_KEL-4_PBW_A/blob/6e583c3fe1784f2a262ea9a84c94b029b6beae90/Image/ERD%20Diagram.png).
 ### Kardinalitas
-- User_Pengguna ke Keranjang : Kardinalitas 1 to 1. Setiap pengguna hanya memiliki satu keranjang, dan satu keranjang hanya dimiliki oleh satu pengguna.
+- Users ke Carts (1 to 1):
+Setiap pengguna hanya memiliki satu keranjang belanja.
+Satu keranjang hanya dimiliki oleh satu pengguna.
 
-- Keranjang ke Item_Keranjang : Kardinalitas 1 to many. Setiap keranjang bisa memiliki banyak item, namun banyaknya item hanya terkait dengan satu keranjang.
+- Carts ke Cart_Items (1 to Many):
+Satu keranjang dapat memiliki banyak item.
+Satu item hanya terkait dengan satu keranjang.
 
-- Item_Keranjang ke Produk : Kardinalitas many to 1. Satu produk bisa muncul di banyak item keranjang yang berbeda, namun satu item keranjang hanya terkait dengan satu produk.
+- Cart_Items ke Products (Many to 1):
+Satu produk dapat muncul dalam banyak keranjang yang berbeda.
+Satu item keranjang hanya terkait dengan satu produk.
 
-- Keranjang ke Pesanan : Kardinalitas 1 to 1. Setiap keranjang user hanya bisa dikaitkan dengan satu pesanan, dan setiap pesanan hanya berasal dari satu keranjang.
+- Carts ke Orders (1 to 1):
+Setiap keranjang hanya dapat dikaitkan dengan satu pesanan.
+Satu pesanan hanya berasal dari satu keranjang.
 
-- Pesanan ke Detail_Pesanan: Kardinalitas 1 to many. Satu pesanan bisa memiliki banyak detail pesanan, tetapi setiap detail pesanan hanya terkait dengan satu pesanan.
+- Orders ke Order_Items (1 to Many):
+Satu pesanan dapat memiliki banyak item pesanan (detail produk).
+Setiap detail pesanan hanya terkait dengan satu pesanan.
 
-- Detail_Pesanan ke Produk: Kardinalitas many to 1. Satu produk bisa muncul di banyak detail pesanan yang berbeda, tetapi setiap detail pesanan hanya terkait dengan satu produk.
+- Order_Items ke Products (Many to 1):
+Satu produk dapat muncul dalam banyak pesanan.
+Satu detail pesanan hanya terkait dengan satu produk.
 
-- Pesanan ke Pembayaran: Kardinalitas many to 1. Banayaknya pesanan hanya terkait dengan satu pembayaran, dan setiap pembayaran bisa untuk banyak pesanan.
+- Orders ke Payments (1 to 1):
+Satu pesanan hanya dapat memiliki satu pembayaran.
+Satu pembayaran hanya terkait dengan satu pesanan.
 
-- Pembayaran ke Pengiriman : Kardinalitas 1 to 1. Satu Pembayaran hanya bisa melakukan satu kali pengiriman untuk berbagai pesanan, dan setiap pengiriman hanya terkait dengan satu pembayaran.
+- Promos (Standalone Entity):
+Promo tidak memiliki hubungan langsung dengan entitas lain, tetapi dapat diterapkan ke pesanan melalui logika sistem.
+
+
+## Link Figma
+- https://www.figma.com/design/QLxN31xm9BJMH9rRpqLM4Y/PBW?node-id=0-1&p=f&t=EcykGw7xPv0NVh3z-0
