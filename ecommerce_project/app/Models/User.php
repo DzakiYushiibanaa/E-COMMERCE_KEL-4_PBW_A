@@ -20,9 +20,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'no_hp',
-        'alamat',
         'password',
+        'provider',      
+        'provider_id',   
     ];
 
     /**
@@ -46,5 +46,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
     }
 }
