@@ -46,7 +46,7 @@ Nama & NPM
 - Pengiriman memiliki metode scheduleDelivery(), updateDeliveryStatus(), dan trackDelivery() untuk mengelola pengiriman.
 
 ## ERD Diagram
-![ERD Diagram e-commerce](https://github.com/DzakiYushiibanaa/E-COMMERCE_KEL-4_PBW_A/blob/a06ca779caa6b6495bc049a7502f0f21c55382ff/Image/ERD%20Diagram.png)
+![ERD Diagram e-commerce](https://github.com/DzakiYushiibanaa/E-COMMERCE_KEL-4_PBW_A/blob/6e583c3fe1784f2a262ea9a84c94b029b6beae90/Image/ERD%20Diagram.png).
 ### Kardinalitas
 - User_Pengguna ke Keranjang : Kardinalitas 1 to 1. Setiap pengguna hanya memiliki satu keranjang, dan satu keranjang hanya dimiliki oleh satu pengguna.
 
