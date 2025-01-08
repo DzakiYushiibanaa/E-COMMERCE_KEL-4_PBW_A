@@ -106,3 +106,7 @@ Satu pembayaran hanya terkait dengan satu pesanan.
 
 - Promos (Standalone Entity):
 Promo tidak memiliki hubungan langsung dengan entitas lain, tetapi dapat diterapkan ke pesanan melalui logika sistem.
+
+
+## Link Figma
+- https://www.figma.com/design/QLxN31xm9BJMH9rRpqLM4Y/PBW?node-id=0-1&p=f&t=EcykGw7xPv0NVh3z-0
