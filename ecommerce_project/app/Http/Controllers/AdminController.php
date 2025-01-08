@@ -3,123 +3,84 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Payments;
 use App\Models\Product;
-use Flasher\Laravel\Facade\Flasher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class AdminController extends Controller
 {
-    public function view_category()
+
+    public function dashboard()
     {
-        $data = Category::all();
-        return view('admin.category', compact('data'));
+        // Hitung total produk
+    $totalProducts = Product::count();
+
+    // Hitung total kategori
+    $totalCategory = Category::count();
+
+    // Hitung total produk terjual
+    $totalProductsSold = OrderItem::sum('quantity');
+
+    // Hitung total pendapatan dari transaksi dengan status 'completed'
+    $totalRevenue = Payments::where('payment_status', 'completed')->sum('amount');
+
+    // Hitung jumlah transaksi yang berhasil
+    $successfulTransactions = Order::where('status', 'processed')->count();
+
+    // Kirim data ke view
+    return view('admin.dashboard', compact('successfulTransactions', 'totalProducts', 'totalCategory', 'totalRevenue', 'totalProductsSold'));
     }
 
-    public function add_category(Request $request)
+    // Menampilkan daftar pesanan untuk konfirmasi
+    public function orderList()
     {
-        $category = new Category;
-        $category->category_name = $request->category;
-        $category->save();
-        session()->flash('success', 'Kategori berhasil ditambahkan!');
-        return redirect()->back();
+        // Ambil semua pesanan dengan informasi pembayaran dan status pengiriman
+        $orders = Order::with('payment')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.orders.index', compact('orders'));
     }
 
-    public function delete_category($id)
+    // Menampilkan detail pesanan
+    public function showOrder($id)
     {
-        $data = Category::find($id);
-        $data->delete();
-        session()->flash('success', 'Kategori berhasil Dihapus!');
-        return redirect()->back();
+        // Ambil detail pesanan beserta item dan produk
+        $order = Order::with('orderItems.product', 'payment')->findOrFail($id);
+
+        return view('admin.orders.detail', compact('order'));
     }
 
-    public function edit_category($id)
+    public function updateOrderStatus($id, Request $request)
     {
-        $data = Category::find($id);
-        return view('admin.edit_category', compact('data'));
+        // Validasi input status pengiriman
+        $request->validate([
+            'status' => 'required|in:pending,processed,shipped,delivered',
+        ]);
+
+        // Ambil pesanan berdasarkan ID
+        $order = Order::findOrFail($id);
+
+        // Ambil nama pengguna yang melakukan perubahan (misalnya, pengguna yang sedang login)
+        $adminName = Auth::user()->name;  // Pastikan pengguna sudah login dan memiliki nama
+
+        // Ambil nama pelanggan
+        $customerName = $order->full_name;
+
+        // Perbarui status pengiriman
+        $order->status = $request->status;
+        $order->save();
+
+        // Notifikasi dengan informasi yang lebih lengkap
+        notyf()->success("Status pengiriman untuk pesanan $order->order_number milik $customerName telah diperbarui oleh $adminName menjadi " . ucfirst($request->status));
+
+        // Redirect kembali ke halaman daftar pesanan dengan notifikasi sukses
+        return redirect()->route('orders.list');
     }
 
-    public function update_category(Request $request,$id)
-    {
-        $data = Category::find($id);
-        $data->category_name= $request->category;
-        $data->save();
-        session()->flash('success', 'Kategori berhasil Diupdate!');
-        return redirect('/view_category');
-    }
-
-    public function add_product()
-    {
-        $category = Category::all();
-        return view('admin.add_product', compact('category'));
-    }
-
-    public function upload_product(Request $request)
-    {
-        $data = new Product();
-        $data->title = $request->title;
-        $data->description = $request->description;
-        $data->price = $request->price;
-        $data->quantity = $request->qty;
-        $data->category = $request->category;
-        $image = $request->image;
-        if($image)
-        {
-            $imagename = time().'.'.$image->getClientOriginalExtension();
-            $request->image->move('products',$imagename);
-            $data->image = $imagename;
-        }
-        $data->save();
-        session()->flash('success', 'Tambah Produk Berhasil!');
-        return redirect()->back();
-    }
-
-    public function view_product()
-    {
-        $product = Product::paginate(3);
-        return view('admin.view_product',compact('product'));
-    }
-
-    public function delete_product($id)
-    {
-        $data = Product::find($id);
-        $image_path = public_path('products/'.$data->image);
-        if(file_exists($image_path))
-        {
-            unlink($image_path);
-        }
-
-        $data->delete();
-        session()->flash('success', 'Produk Berhasil Di Hapus!');
-        return redirect()->back();
-    }
-
-    public function update_product($id)
-    {
-        $data = Product::find($id);
-        $category = Category::all();
-        return view('admin.update_page', compact('data','category'));
-    }
-
-    public function edit_product(Request $request,$id)
-    {
-        $data = Product::find($id);
-        $data->title = $request->title;
-        $data->description = $request->description;
-        $data->price = $request->price;
-        $data->quantity = $request->quantity;
-        $data->category = $request->category;
-        $image = $request->image;
-
-        if($image)
-        {
-            $imagename = time().'.'.$image->getClientOriginalExtension();
-            $request->image->move('products',$imagename);
-            $data->image = $imagename;
-
-        }
-        $data->save();
-        session()->flash('success', 'Produk Berhasil Di Update!');
-        return redirect('/view_product');
-    }
 }
